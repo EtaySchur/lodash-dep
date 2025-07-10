@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "name": "Legacy Laptop",
+    "price": 999,
+    "category": "electronics",
+    "inStock": true,
+    "legacy": true,
+    "deprecated": true
+  },
+  {
+    "id": 2,
+    "name": "Deprecated Phone",
+    "price": 699,
+    "category": "electronics",
+    "inStock": false,
+    "legacy": true,
+    "deprecated": true
+  },
+  {
+    "id": 3,
+    "name": "Removed Book",
+    "price": 29,
+    "category": "books",
+    "inStock": true,
+    "legacy": true,
+    "deprecated": true
+  },
+  {
+    "id": 4,
+    "name": "Old Chair",
+    "price": 199,
+    "category": "furniture",
+    "inStock": true,
+    "legacy": true,
+    "deprecated": true
+  }
+] 

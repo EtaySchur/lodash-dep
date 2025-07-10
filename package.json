@@ -1,0 +1,35 @@
+{
+  "name": "lodash-example",
+  "version": "1.0.0",
+  "description": "Node.js app demonstrating Express and Lodash methods",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "4.17.1",
+    "lodash": "3.10.0"
+  },
+  "devDependencies": {},
+  "peerDependencies": {
+    "node": ">=12.0.0"
+  },
+  "keywords": [
+    "legacy",
+    "express",
+    "lodash",
+    "deprecated",
+    "nodejs"
+  ],
+  "author": "Legacy Developer",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/legacy/lodash-example.git"
+  },
+  "bugs": {
+    "url": "https://github.com/legacy/lodash-example/issues"
+  },
+  "homepage": "https://github.com/legacy/lodash-example#readme"
+} 
