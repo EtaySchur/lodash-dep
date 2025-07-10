@@ -81,6 +81,41 @@ router.del('/delete/:id', function(req, res) {
     });
   }
 });
+
+router.get('/combined-example', function(req, res) {
+  var sampleData = [
+    { id: 1, name: 'Product A', price: 100, category: 'electronics', rating: 4.5 },
+    { id: 2, name: 'Product B', price: 200, category: 'electronics', rating: 4.2 },
+    { id: 3, name: 'Product C', price: 150, category: 'books', rating: 4.8 },
+    { id: 4, name: 'Product D', price: 300, category: 'electronics', rating: 4.0 },
+    { id: 5, name: 'Product E', price: 80, category: 'books', rating: 4.6 }
+  ];
+
+  var electronicsProducts = _.where(sampleData, { category: 'electronics' });
+  var maxPriceProduct = _.max(sampleData, 'price');
+  var maxPriceProductPairs = _.pairs(maxPriceProduct);
+  var highRatedProducts = _.where(sampleData, function(product) {
+    return product.rating >= 4.5;
+  });
+  var highestRatedProduct = _.max(sampleData, 'rating');
+  var highestRatedPairs = _.pairs(highestRatedProduct);
+
+  res.json({
+    message: 'Combined example using _.max, _.pairs, and _.where',
+    electronicsProducts: electronicsProducts,
+    maxPriceProduct: maxPriceProduct,
+    maxPriceProductPairs: maxPriceProductPairs,
+    highRatedProducts: highRatedProducts,
+    highestRatedProduct: highestRatedProduct,
+    highestRatedPairs: highestRatedPairs,
+    summary: {
+      totalProducts: sampleData.length,
+      electronicsCount: electronicsProducts.length,
+      highRatedCount: highRatedProducts.length
+    }
+  });
+});
+
 router.use(function(req, res, next) {
   console.log('Route middleware - Path:', req.path);
   next();
