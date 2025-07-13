@@ -1,4 +1,3 @@
-const express = require('express');
 const _ = require('lodash');
 
 // Import the middleware functions
@@ -11,13 +10,13 @@ describe('Common Middleware Functions', () => {
     req = {
       param: jest.fn(),
       headers: {},
-      body: {}
+      body: {},
     };
     res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
       jsonp: jest.fn(),
-      sendfile: jest.fn()
+      sendfile: jest.fn(),
     };
     next = jest.fn();
   });
@@ -123,7 +122,8 @@ describe('Common Middleware Lodash Methods', () => {
     });
     it('should check if log keys contain required fields', () => {
       const logKeys = ['method', 'url', 'timestamp'];
-      const hasRequiredFields = _.contains(logKeys, 'method') && _.contains(logKeys, 'url');
+      const hasRequiredFields =
+        _.contains(logKeys, 'method') && _.contains(logKeys, 'url');
       expect(hasRequiredFields).toBe(true);
     });
     it('should check if request body contains data field', () => {
@@ -136,7 +136,7 @@ describe('Common Middleware Lodash Methods', () => {
     it('should find error type by name', () => {
       const errorTypes = [
         { type: 'ValidationError', message: 'Validation failed' },
-        { type: 'NotFoundError', message: 'Resource not found' }
+        { type: 'NotFoundError', message: 'Resource not found' },
       ];
       const errorType = _.where(errorTypes, { type: 'ValidationError' });
       expect(errorType).toHaveLength(1);
@@ -146,7 +146,7 @@ describe('Common Middleware Lodash Methods', () => {
   describe('_.first usage in middleware', () => {
     it('should get first error type', () => {
       const errorType = [
-        { type: 'ValidationError', message: 'Validation failed' }
+        { type: 'ValidationError', message: 'Validation failed' },
       ];
       const firstErrorType = _.first(errorType);
       expect(firstErrorType.type).toBe('ValidationError');
@@ -174,4 +174,4 @@ describe('Common Middleware Lodash Methods', () => {
       expect(restItems).toEqual([2, 3, 4, 5]);
     });
   });
-}); 
+});

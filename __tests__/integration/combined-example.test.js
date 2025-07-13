@@ -18,7 +18,9 @@ describe('Combined Example Endpoint', () => {
         .expect(200);
 
       // Check main message
-      expect(response.body.message).toBe('Product analytics using _.max, _.pairs, and _.filter');
+      expect(response.body.message).toBe(
+        'Product analytics using _.max, _.pairs, and _.filter'
+      );
 
       // Check electronics products (_.where usage)
       expect(response.body).toHaveProperty('electronicsProducts');
@@ -45,7 +47,7 @@ describe('Combined Example Endpoint', () => {
       expect(response.body).toHaveProperty('highRatedProducts');
       expect(Array.isArray(response.body.highRatedProducts)).toBe(true);
       expect(response.body.highRatedProducts).toHaveLength(3);
-      
+
       // Check that products with rating >= 4.5 are present
       const highRatedProductNames = response.body.highRatedProducts
         .filter(product => product.rating >= 4.5)
@@ -85,37 +87,66 @@ describe('Combined Example Endpoint', () => {
 
       // Verify the sample data structure
       const sampleData = [
-        { id: 1, name: 'Product A', price: 100, category: 'electronics', rating: 4.5 },
-        { id: 2, name: 'Product B', price: 200, category: 'electronics', rating: 4.2 },
-        { id: 3, name: 'Product C', price: 150, category: 'books', rating: 4.8 },
-        { id: 4, name: 'Product D', price: 300, category: 'electronics', rating: 4.0 },
-        { id: 5, name: 'Product E', price: 80, category: 'books', rating: 4.6 }
+        {
+          id: 1,
+          name: 'Product A',
+          price: 100,
+          category: 'electronics',
+          rating: 4.5,
+        },
+        {
+          id: 2,
+          name: 'Product B',
+          price: 200,
+          category: 'electronics',
+          rating: 4.2,
+        },
+        {
+          id: 3,
+          name: 'Product C',
+          price: 150,
+          category: 'books',
+          rating: 4.8,
+        },
+        {
+          id: 4,
+          name: 'Product D',
+          price: 300,
+          category: 'electronics',
+          rating: 4.0,
+        },
+        { id: 5, name: 'Product E', price: 80, category: 'books', rating: 4.6 },
       ];
 
       // Check that electronics products are correctly filtered
-      const electronicsProducts = _.where(sampleData, { category: 'electronics' });
-      expect(response.body.electronicsProducts).toHaveLength(electronicsProducts.length);
+      const electronicsProducts = _.where(sampleData, {
+        category: 'electronics',
+      });
+      expect(response.body.electronicsProducts).toHaveLength(
+        electronicsProducts.length
+      );
 
       // Check that max price product is correct
       const maxPriceProduct = _.max(sampleData, 'price');
       expect(response.body.maxPriceProduct.price).toBe(maxPriceProduct.price);
 
       // Check that high rated products are correctly filtered
-      const highRatedProducts = _.where(sampleData, function(product) {
+      const highRatedProducts = _.where(sampleData, function (product) {
         return product.rating >= 4.5;
       });
       expect(response.body.highRatedProducts).toHaveLength(3);
-      
+
       // Check that the expected high-rated products are present
-      const highRatedNames = highRatedProducts
-        .map(product => product.name);
+      const highRatedNames = highRatedProducts.map(product => product.name);
       expect(highRatedNames).toContain('Product A');
       expect(highRatedNames).toContain('Product C');
       expect(highRatedNames).toContain('Product E');
 
       // Check that highest rated product is correct
       const highestRatedProduct = _.max(sampleData, 'rating');
-      expect(response.body.highestRatedProduct.rating).toBe(highestRatedProduct.rating);
+      expect(response.body.highestRatedProduct.rating).toBe(
+        highestRatedProduct.rating
+      );
     });
   });
 });
@@ -124,15 +155,41 @@ describe('Combined Example Lodash Methods Integration', () => {
   describe('_.where, _.max, and _.pairs integration', () => {
     it('should demonstrate all three methods working together', () => {
       const sampleData = [
-        { id: 1, name: 'Product A', price: 100, category: 'electronics', rating: 4.5 },
-        { id: 2, name: 'Product B', price: 200, category: 'electronics', rating: 4.2 },
-        { id: 3, name: 'Product C', price: 150, category: 'books', rating: 4.8 },
-        { id: 4, name: 'Product D', price: 300, category: 'electronics', rating: 4.0 },
-        { id: 5, name: 'Product E', price: 80, category: 'books', rating: 4.6 }
+        {
+          id: 1,
+          name: 'Product A',
+          price: 100,
+          category: 'electronics',
+          rating: 4.5,
+        },
+        {
+          id: 2,
+          name: 'Product B',
+          price: 200,
+          category: 'electronics',
+          rating: 4.2,
+        },
+        {
+          id: 3,
+          name: 'Product C',
+          price: 150,
+          category: 'books',
+          rating: 4.8,
+        },
+        {
+          id: 4,
+          name: 'Product D',
+          price: 300,
+          category: 'electronics',
+          rating: 4.0,
+        },
+        { id: 5, name: 'Product E', price: 80, category: 'books', rating: 4.6 },
       ];
 
       // Test _.where filtering
-      const electronicsProducts = _.where(sampleData, { category: 'electronics' });
+      const electronicsProducts = _.where(sampleData, {
+        category: 'electronics',
+      });
       expect(electronicsProducts).toHaveLength(3);
       expect(electronicsProducts[0].name).toBe('Product A');
       expect(electronicsProducts[1].name).toBe('Product B');
@@ -150,18 +207,17 @@ describe('Combined Example Lodash Methods Integration', () => {
         ['name', 'Product D'],
         ['price', 300],
         ['category', 'electronics'],
-        ['rating', 4.0]
+        ['rating', 4.0],
       ]);
 
       // Test _.filter with function
-      const highRatedProducts = _.filter(sampleData, function(product) {
+      const highRatedProducts = _.filter(sampleData, function (product) {
         return product.rating >= 4.5;
       });
       expect(highRatedProducts).toHaveLength(3); // Now working correctly with _.filter
-      
+
       // Check that the expected high-rated products are present
-      const highRatedNames = highRatedProducts
-        .map(product => product.name);
+      const highRatedNames = highRatedProducts.map(product => product.name);
       expect(highRatedNames).toContain('Product A');
       expect(highRatedNames).toContain('Product C');
       expect(highRatedNames).toContain('Product E');
@@ -178,13 +234,15 @@ describe('Combined Example Lodash Methods Integration', () => {
         ['name', 'Product C'],
         ['price', 150],
         ['category', 'books'],
-        ['rating', 4.8]
+        ['rating', 4.8],
       ]);
     });
 
     it('should handle edge cases correctly', () => {
       const emptyData = [];
-      const singleItemData = [{ id: 1, name: 'Single', price: 100, category: 'test', rating: 4.0 }];
+      const singleItemData = [
+        { id: 1, name: 'Single', price: 100, category: 'test', rating: 4.0 },
+      ];
 
       // Test with empty data
       const emptyElectronics = _.where(emptyData, { category: 'electronics' });
@@ -204,4 +262,4 @@ describe('Combined Example Lodash Methods Integration', () => {
       expect(singlePairs.length).toBeGreaterThan(0);
     });
   });
-}); 
+});

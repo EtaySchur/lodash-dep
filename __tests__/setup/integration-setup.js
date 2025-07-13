@@ -12,11 +12,11 @@ beforeAll(async () => {
 afterAll(async () => {
   // Clean up server after all integration tests
   if (server) {
-    await new Promise((resolve) => server.close(resolve));
+    await new Promise(resolve => server.close(resolve));
   }
 });
 
 // Helper to get the server's port
 global.getTestServerPort = () => {
   return server ? server.address().port : 3000;
-}; 
+};

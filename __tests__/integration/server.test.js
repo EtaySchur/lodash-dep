@@ -1,5 +1,4 @@
 const request = require('supertest');
-const express = require('express');
 const _ = require('lodash');
 
 // Import the app
@@ -8,9 +7,7 @@ const app = require('../../server');
 describe('Server API Endpoints', () => {
   describe('GET /api/users', () => {
     it('should return active users and user data', async () => {
-      const response = await request(app)
-        .get('/api/users')
-        .expect(200);
+      const response = await request(app).get('/api/users').expect(200);
 
       expect(response.body).toHaveProperty('message');
       expect(response.body).toHaveProperty('activeUsers');
@@ -23,9 +20,7 @@ describe('Server API Endpoints', () => {
 
   describe('GET /api/users/:id', () => {
     it('should return user by valid ID', async () => {
-      const response = await request(app)
-        .get('/api/users/1')
-        .expect(200);
+      const response = await request(app).get('/api/users/1').expect(200);
 
       expect(response.body).toHaveProperty('user');
       expect(response.body).toHaveProperty('found');
@@ -33,9 +28,7 @@ describe('Server API Endpoints', () => {
     });
 
     it('should return 404 for invalid user ID', async () => {
-      const response = await request(app)
-        .get('/api/users/999')
-        .expect(404);
+      const response = await request(app).get('/api/users/999').expect(404);
 
       expect(response.body).toHaveProperty('error');
       expect(response.body).toHaveProperty('found');
@@ -46,9 +39,7 @@ describe('Server API Endpoints', () => {
 
   describe('GET /api/scores', () => {
     it('should return processed scores data', async () => {
-      const response = await request(app)
-        .get('/api/scores')
-        .expect(200);
+      const response = await request(app).get('/api/scores').expect(200);
 
       expect(response.body).toHaveProperty('allScores');
       expect(response.body).toHaveProperty('compactScores');
@@ -74,9 +65,7 @@ describe('Server API Endpoints', () => {
     });
 
     it('should serve products.json file when no category specified', async () => {
-      const response = await request(app)
-        .get('/api/products')
-        .expect(200);
+      const response = await request(app).get('/api/products').expect(200);
 
       // This should return the JSON file content
       expect(response.body).toBeDefined();
@@ -85,9 +74,7 @@ describe('Server API Endpoints', () => {
 
   describe('DELETE /api/users/:id', () => {
     it('should delete user with valid ID', async () => {
-      const response = await request(app)
-        .del('/api/users/1')
-        .expect(200);
+      const response = await request(app).del('/api/users/1').expect(200);
 
       expect(response.body).toHaveProperty('message');
       expect(response.body).toHaveProperty('remainingUsers');
@@ -95,9 +82,7 @@ describe('Server API Endpoints', () => {
     });
 
     it('should return 404 for invalid user ID', async () => {
-      const response = await request(app)
-        .del('/api/users/999')
-        .expect(404);
+      const response = await request(app).del('/api/users/999').expect(404);
 
       expect(response.body).toHaveProperty('error');
       expect(response.body.error).toBe('User not found');
@@ -110,7 +95,7 @@ describe('Server API Endpoints', () => {
         name: 'Test User',
         age: 25,
         active: true,
-        scores: [85, 90, 88]
+        scores: [85, 90, 88],
       };
 
       const response = await request(app)
@@ -133,7 +118,7 @@ describe('Lodash Deprecated Methods Usage', () => {
       const users = [
         { id: 1, name: 'John', active: true },
         { id: 2, name: 'Jane', active: false },
-        { id: 3, name: 'Bob', active: true }
+        { id: 3, name: 'Bob', active: true },
       ];
 
       const activeUsers = _.where(users, { active: true });
@@ -148,7 +133,7 @@ describe('Lodash Deprecated Methods Usage', () => {
       const users = [
         { id: 1, name: 'John' },
         { id: 2, name: 'Jane' },
-        { id: 3, name: 'Bob' }
+        { id: 3, name: 'Bob' },
       ];
 
       const names = _.pluck(users, 'name');
@@ -161,7 +146,7 @@ describe('Lodash Deprecated Methods Usage', () => {
       const users = [
         { id: 1, age: 30 },
         { id: 2, age: 25 },
-        { id: 3, age: 35 }
+        { id: 3, age: 35 },
       ];
 
       const maxAgeUser = _.max(users, 'age');
@@ -187,7 +172,7 @@ describe('Lodash Deprecated Methods Usage', () => {
     it('should get first element from array', () => {
       const users = [
         { id: 1, name: 'John' },
-        { id: 2, name: 'Jane' }
+        { id: 2, name: 'Jane' },
       ];
 
       const firstUser = _.first(users);
@@ -201,7 +186,7 @@ describe('Lodash Deprecated Methods Usage', () => {
       const nestedScores = [
         [85, 90, 78],
         [92, 88, 95],
-        [70, 75, 80]
+        [70, 75, 80],
       ];
 
       const flattened = _.flatten(nestedScores);
@@ -230,7 +215,7 @@ describe('Lodash Deprecated Methods Usage', () => {
       const users = [
         { id: 1, name: 'John' },
         { id: 2, name: 'Jane' },
-        { id: 3, name: 'Bob' }
+        { id: 3, name: 'Bob' },
       ];
 
       const filteredUsers = _.reject(users, { id: 2 });
@@ -239,4 +224,4 @@ describe('Lodash Deprecated Methods Usage', () => {
       expect(filteredUsers[1].id).toBe(3);
     });
   });
-}); 
+});

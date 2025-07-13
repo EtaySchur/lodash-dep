@@ -5,45 +5,45 @@ const mockUsers = [
   { id: 1, name: 'John', age: 30, active: true, scores: [85, 90, 88] },
   { id: 2, name: 'Jane', age: 25, active: false, scores: [92, 88, 95] },
   { id: 3, name: 'Bob', age: 35, active: true, scores: [78, 85, 82] },
-  { id: 4, name: 'Alice', age: 28, active: true, scores: [95, 92, 90] }
+  { id: 4, name: 'Alice', age: 28, active: true, scores: [95, 92, 90] },
 ];
 
 const mockProducts = [
   { id: 1, name: 'Laptop', price: 999, category: 'electronics' },
   { id: 2, name: 'Phone', price: 699, category: 'electronics' },
   { id: 3, name: 'Book', price: 25, category: 'books' },
-  { id: 4, name: 'Tablet', price: 399, category: 'electronics' }
+  { id: 4, name: 'Tablet', price: 399, category: 'electronics' },
 ];
 
 // Pure business logic functions (what we should actually test)
 const businessLogic = {
   // Get active users
-  getActiveUsers: (users) => {
+  getActiveUsers: users => {
     return _.where(users, { active: true });
   },
 
   // Get user names
-  getUserNames: (users) => {
+  getUserNames: users => {
     return _.pluck(users, 'name');
   },
 
   // Find user with maximum age
-  getUserWithMaxAge: (users) => {
+  getUserWithMaxAge: users => {
     return _.max(users, 'age');
   },
 
   // Get total user count
-  getTotalUsers: (users) => {
+  getTotalUsers: users => {
     return users.length;
   },
 
   // Process scores (compact, rest, max)
-  processScores: (scores) => {
+  processScores: scores => {
     return {
       allScores: scores,
       compactScores: _.compact(scores),
       restScores: _.rest(scores),
-      maxScore: _.max(scores)
+      maxScore: _.max(scores),
     };
   },
 
@@ -53,7 +53,7 @@ const businessLogic = {
   },
 
   // Find product with maximum price
-  getProductWithMaxPrice: (products) => {
+  getProductWithMaxPrice: products => {
     return _.max(products, 'price');
   },
 
@@ -63,19 +63,19 @@ const businessLogic = {
   },
 
   // Get first user
-  getFirstUser: (users) => {
+  getFirstUser: users => {
     return _.first(users);
   },
 
   // Flatten nested scores
-  flattenScores: (nestedScores) => {
+  flattenScores: nestedScores => {
     return _.flatten(nestedScores);
   },
 
   // Remove inactive users
-  removeInactiveUsers: (users) => {
+  removeInactiveUsers: users => {
     return _.reject(users, { active: false });
-  }
+  },
 };
 
 describe('Business Logic Unit Tests', () => {
@@ -135,7 +135,7 @@ describe('Business Logic Unit Tests', () => {
       const nestedScores = [
         [85, 90, 78],
         [92, 88, 95],
-        [70, 75, 80]
+        [70, 75, 80],
       ];
 
       const flattened = businessLogic.flattenScores(nestedScores);
@@ -145,13 +145,19 @@ describe('Business Logic Unit Tests', () => {
 
   describe('Product Management', () => {
     it('should filter products by category', () => {
-      const electronics = businessLogic.filterProductsByCategory(mockProducts, 'electronics');
+      const electronics = businessLogic.filterProductsByCategory(
+        mockProducts,
+        'electronics'
+      );
       expect(electronics).toHaveLength(3);
-      expect(electronics.every(product => product.category === 'electronics')).toBe(true);
+      expect(
+        electronics.every(product => product.category === 'electronics')
+      ).toBe(true);
     });
 
     it('should find product with maximum price', () => {
-      const maxPriceProduct = businessLogic.getProductWithMaxPrice(mockProducts);
+      const maxPriceProduct =
+        businessLogic.getProductWithMaxPrice(mockProducts);
       expect(maxPriceProduct.price).toBe(999);
       expect(maxPriceProduct.name).toBe('Laptop');
     });
@@ -204,4 +210,4 @@ describe('Business Logic Unit Tests', () => {
       expect(result).toHaveLength(3);
     });
   });
-}); 
+});

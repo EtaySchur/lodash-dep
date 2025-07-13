@@ -14,9 +14,7 @@ app.use('/data', dataRoutes);
 describe('Data Routes', () => {
   describe('GET /data', () => {
     it('should return processed items data', async () => {
-      const response = await request(app)
-        .get('/data/data')
-        .expect(200);
+      const response = await request(app).get('/data/data').expect(200);
 
       expect(response.body).toHaveProperty('items');
       expect(response.body).toHaveProperty('itemIds');
@@ -77,7 +75,7 @@ describe('Data Routes', () => {
       const newItem = {
         type: 'test',
         value: 500,
-        tags: ['test', 'new']
+        tags: ['test', 'new'],
       };
 
       const response = await request(app)
@@ -96,9 +94,7 @@ describe('Data Routes', () => {
 
   describe('DELETE /delete/:id', () => {
     it('should delete item with valid ID', async () => {
-      const response = await request(app)
-        .del('/data/delete/1')
-        .expect(200);
+      const response = await request(app).del('/data/delete/1').expect(200);
 
       expect(response.body).toHaveProperty('message');
       expect(response.body).toHaveProperty('remainingItems');
@@ -106,9 +102,7 @@ describe('Data Routes', () => {
     });
 
     it('should return 404 for invalid item ID', async () => {
-      const response = await request(app)
-        .del('/data/delete/999')
-        .expect(404);
+      const response = await request(app).del('/data/delete/999').expect(404);
 
       expect(response.body).toHaveProperty('error');
       expect(response.body.error).toBe('Item not found');
@@ -129,7 +123,9 @@ describe('Data Routes', () => {
       expect(response.body).toHaveProperty('highestRatedProduct');
       expect(response.body).toHaveProperty('highestRatedPairs');
       expect(response.body).toHaveProperty('summary');
-      expect(response.body.message).toBe('Product analytics using _.max, _.pairs, and _.filter');
+      expect(response.body.message).toBe(
+        'Product analytics using _.max, _.pairs, and _.filter'
+      );
       expect(Array.isArray(response.body.electronicsProducts)).toBe(true);
       expect(Array.isArray(response.body.maxPriceProductPairs)).toBe(true);
       expect(Array.isArray(response.body.highRatedProducts)).toBe(true);
@@ -150,7 +146,7 @@ describe('Data Routes Lodash Methods', () => {
       const items = [
         { id: 1, type: 'old', value: 100 },
         { id: 2, type: 'old', value: 200 },
-        { id: 3, type: 'modern', value: 300 }
+        { id: 3, type: 'modern', value: 300 },
       ];
 
       const oldItems = _.where(items, { type: 'old' });
@@ -163,7 +159,7 @@ describe('Data Routes Lodash Methods', () => {
       const items = [
         { id: 1, type: 'old', value: 100 },
         { id: 2, type: 'old', value: 200 },
-        { id: 3, type: 'modern', value: 300 }
+        { id: 3, type: 'modern', value: 300 },
       ];
 
       const item = _.where(items, { id: 2 });
@@ -177,7 +173,7 @@ describe('Data Routes Lodash Methods', () => {
       const items = [
         { id: 1, type: 'old' },
         { id: 2, type: 'old' },
-        { id: 3, type: 'modern' }
+        { id: 3, type: 'modern' },
       ];
 
       const itemIds = _.pluck(items, 'id');
@@ -188,7 +184,7 @@ describe('Data Routes Lodash Methods', () => {
       const items = [
         { id: 1, type: 'old' },
         { id: 2, type: 'old' },
-        { id: 3, type: 'modern' }
+        { id: 3, type: 'modern' },
       ];
 
       const types = _.pluck(items, 'type');
@@ -201,7 +197,7 @@ describe('Data Routes Lodash Methods', () => {
       const items = [
         { id: 1, value: 100 },
         { id: 2, value: 200 },
-        { id: 3, value: 150 }
+        { id: 3, value: 150 },
       ];
 
       const maxValueItem = _.max(items, 'value');
@@ -233,7 +229,7 @@ describe('Data Routes Lodash Methods', () => {
     it('should get first item from array', () => {
       const items = [
         { id: 1, type: 'old' },
-        { id: 2, type: 'old' }
+        { id: 2, type: 'old' },
       ];
 
       const firstItem = _.first(items);
@@ -247,7 +243,7 @@ describe('Data Routes Lodash Methods', () => {
       const items = [
         { id: 1, type: 'old' },
         { id: 2, type: 'old' },
-        { id: 3, type: 'modern' }
+        { id: 3, type: 'modern' },
       ];
 
       const restItems = _.rest(items);
@@ -270,7 +266,7 @@ describe('Data Routes Lodash Methods', () => {
       const nestedArrays = [
         [1, 2, 3],
         [4, 5, 6],
-        [7, 8, 9]
+        [7, 8, 9],
       ];
       const flattened = _.flatten(nestedArrays);
       expect(flattened).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
@@ -282,7 +278,7 @@ describe('Data Routes Lodash Methods', () => {
       const items = [
         { id: 1, type: 'old' },
         { id: 2, type: 'old' },
-        { id: 3, type: 'modern' }
+        { id: 3, type: 'modern' },
       ];
 
       const filteredItems = _.reject(items, { id: 2 });
@@ -298,7 +294,7 @@ describe('Data Routes Lodash Methods', () => {
         id: 1,
         name: 'Product A',
         price: 100,
-        category: 'electronics'
+        category: 'electronics',
       };
 
       const pairs = _.pairs(product);
@@ -306,8 +302,8 @@ describe('Data Routes Lodash Methods', () => {
         ['id', 1],
         ['name', 'Product A'],
         ['price', 100],
-        ['category', 'electronics']
+        ['category', 'electronics'],
       ]);
     });
   });
-}); 
+});

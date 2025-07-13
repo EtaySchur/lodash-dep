@@ -5,7 +5,7 @@ const createMockRequest = (params = {}, query = {}, body = {}) => ({
   params,
   query,
   body,
-  param: (name) => params[name] || query[name]
+  param: name => params[name] || query[name],
 });
 
 const createMockResponse = () => {
@@ -21,13 +21,13 @@ const createMockResponse = () => {
 const mockUsers = [
   { id: 1, name: 'John', age: 30, active: true, scores: [85, 90, 88] },
   { id: 2, name: 'Jane', age: 25, active: false, scores: [92, 88, 95] },
-  { id: 3, name: 'Bob', age: 35, active: true, scores: [78, 85, 82] }
+  { id: 3, name: 'Bob', age: 35, active: true, scores: [78, 85, 82] },
 ];
 
 const mockProducts = [
   { id: 1, name: 'Laptop', price: 999, category: 'electronics' },
   { id: 2, name: 'Phone', price: 699, category: 'electronics' },
-  { id: 3, name: 'Book', price: 25, category: 'books' }
+  { id: 3, name: 'Book', price: 25, category: 'books' },
 ];
 
 // Route handler functions (extracted from the actual routes)
@@ -44,7 +44,7 @@ const routeHandlers = {
       activeUsers,
       userNames,
       maxAge: maxAgeUser.age,
-      totalUsers
+      totalUsers,
     });
   },
 
@@ -56,12 +56,12 @@ const routeHandlers = {
     if (user) {
       res.jsonp({
         user,
-        found: true
+        found: true,
       });
     } else {
       res.status(404).jsonp({
         error: 'User not found',
-        found: false
+        found: false,
       });
     }
   },
@@ -77,14 +77,14 @@ const routeHandlers = {
       allScores,
       compactScores,
       restScores,
-      maxScore
+      maxScore,
     });
   },
 
   // GET /api/products
   getProducts: (req, res) => {
     const category = req.query.category;
-    
+
     if (category) {
       const filteredProducts = _.where(mockProducts, { category });
       res.jsonp(filteredProducts);
@@ -103,11 +103,11 @@ const routeHandlers = {
       const remainingUsers = _.reject(mockUsers, { id: userId });
       res.jsonp({
         message: 'User deleted',
-        remainingUsers: remainingUsers.length
+        remainingUsers: remainingUsers.length,
       });
     } else {
       res.status(404).jsonp({
-        error: 'User not found'
+        error: 'User not found',
       });
     }
   },
@@ -116,14 +116,14 @@ const routeHandlers = {
   createUser: (req, res) => {
     const newUser = {
       id: mockUsers.length + 1,
-      ...req.body
+      ...req.body,
     };
 
     res.jsonp({
       message: 'User created',
-      user: newUser
+      user: newUser,
     });
-  }
+  },
 };
 
 describe('Route Handler Unit Tests', () => {
@@ -137,11 +137,11 @@ describe('Route Handler Unit Tests', () => {
       expect(res.jsonp).toHaveBeenCalledWith({
         message: 'API using old methods',
         activeUsers: expect.arrayContaining([
-          expect.objectContaining({ active: true })
+          expect.objectContaining({ active: true }),
         ]),
         userNames: ['John', 'Jane', 'Bob'],
         maxAge: 35,
-        totalUsers: 3
+        totalUsers: 3,
       });
     });
   });
@@ -155,7 +155,7 @@ describe('Route Handler Unit Tests', () => {
 
       expect(res.jsonp).toHaveBeenCalledWith({
         user: expect.objectContaining({ id: 1, name: 'John' }),
-        found: true
+        found: true,
       });
     });
 
@@ -168,7 +168,7 @@ describe('Route Handler Unit Tests', () => {
       expect(res.status).toHaveBeenCalledWith(404);
       expect(res.jsonp).toHaveBeenCalledWith({
         error: 'User not found',
-        found: false
+        found: false,
       });
     });
   });
@@ -184,7 +184,7 @@ describe('Route Handler Unit Tests', () => {
         allScores: [85, null, 90, undefined, 78, 0, 95],
         compactScores: [85, 90, 78, 95],
         restScores: [null, 90, undefined, 78, 0, 95],
-        maxScore: 95
+        maxScore: 95,
       });
     });
   });
@@ -198,7 +198,7 @@ describe('Route Handler Unit Tests', () => {
 
       expect(res.jsonp).toHaveBeenCalledWith(
         expect.arrayContaining([
-          expect.objectContaining({ category: 'electronics' })
+          expect.objectContaining({ category: 'electronics' }),
         ])
       );
     });
@@ -222,7 +222,7 @@ describe('Route Handler Unit Tests', () => {
 
       expect(res.jsonp).toHaveBeenCalledWith({
         message: 'User deleted',
-        remainingUsers: 2
+        remainingUsers: 2,
       });
     });
 
@@ -234,7 +234,7 @@ describe('Route Handler Unit Tests', () => {
 
       expect(res.status).toHaveBeenCalledWith(404);
       expect(res.jsonp).toHaveBeenCalledWith({
-        error: 'User not found'
+        error: 'User not found',
       });
     });
   });
@@ -244,7 +244,7 @@ describe('Route Handler Unit Tests', () => {
       const newUserData = {
         name: 'Test User',
         age: 25,
-        active: true
+        active: true,
       };
       const req = createMockRequest({}, {}, newUserData);
       const res = createMockResponse();
@@ -257,8 +257,8 @@ describe('Route Handler Unit Tests', () => {
           id: 4,
           name: 'Test User',
           age: 25,
-          active: true
-        })
+          active: true,
+        }),
       });
     });
   });
@@ -266,16 +266,16 @@ describe('Route Handler Unit Tests', () => {
   describe('Express Deprecated Methods', () => {
     it('should use req.param() for parameter access', () => {
       const req = createMockRequest({ id: '1' }, { category: 'electronics' });
-      
+
       expect(req.param('id')).toBe('1');
       expect(req.param('category')).toBe('electronics');
     });
 
     it('should use res.jsonp() for responses', () => {
       const res = createMockResponse();
-      
+
       res.jsonp({ test: 'data' });
       expect(res.jsonp).toHaveBeenCalledWith({ test: 'data' });
     });
   });
-}); 
+});

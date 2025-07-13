@@ -1,109 +1,49 @@
-var _ = require('lodash');
-function middleware(req, res, next) {
-  var param = req.param('param');
-  var validParams = ['param', 'removed'];
-  var isValidParam = _.contains(validParams, param);
-  if (param && isValidParam) {
-    req.data = {
-      param: param,
-      timestamp: new Date().toISOString(),
-      isValid: true
-    };
-  } else {
-    req.data = {
-      param: param,
-      timestamp: new Date().toISOString(),
-      isValid: false
-    };
-  }
-  console.log('Middleware executed with param:', param);
-  next();
-}
-function errorHandler(err, req, res, next) {
-  // Use array of objects for errorTypes for compatibility with tests
-  var errorTypes = [
-    { type: 'ValidationError', message: 'Validation failed' },
-    { type: 'NotFoundError', message: 'Resource not found' },
-    { type: 'Error', message: 'General error' }
-  ];
-  var errorType = _.where(errorTypes, { type: err.name });
-  var firstErrorType = _.first(errorType);
-  var errorResponse = {
-    error: true,
-    message: err.message,
-    type: (firstErrorType && firstErrorType.type) || 'UnknownError',
-    timestamp: new Date().toISOString()
-  };
-  res.status(500).jsonp(errorResponse);
-}
-function auth(req, res, next) {
-  var apiKey = req.param('apiKey') || req.headers['x-api-key'];
-  var validKeys = ['key-1', 'key-2', 'removed-key'];
-  var isValidKey = _.contains(validKeys, apiKey);
-  if (isValidKey) {
-    req.auth = {
-      authenticated: true,
-      key: apiKey,
-      method: 'old'
-    };
-    next();
-  } else {
-    res.status(401).sendfile(__dirname + '/../public/unauthorized.html');
-  }
-}
-function logger(req, res, next) {
-  var logData = {
-    method: req.method,
-    url: req.url,
-    timestamp: new Date().toISOString(),
-    userAgent: req.headers['user-agent']
-  };
-  var logKeys = _.keys(logData);
-  var hasRequiredFields = _.contains(logKeys, 'method') && _.contains(logKeys, 'url');
-  if (hasRequiredFields) {
-    console.log('Log:', JSON.stringify(logData));
-  }
-  next();
-}
-function dataTransform(req, res, next) {
-  if (req.body && _.contains(_.keys(req.body), 'data')) {
-    var originalData = req.body.data;
-    var compactData = _.compact(originalData);
-    var firstItem = _.first(compactData);
-    var restItems = _.rest(compactData);
-    req.transformedData = {
-      original: originalData,
-      compact: compactData,
-      first: firstItem,
-      rest: restItems
-    };
-  }
-  next();
-}
-function responseFormat(req, res, next) {
-  var originalJson = res.json;
-  res.json = function(data) {
-    var response = {
-      data: data,
-      timestamp: new Date().toISOString(),
-      version: '3.10.0'
-    };
-    if (_.contains(['array', 'object'], typeof data)) {
-      var dataKeys = _.keys(data);
-      response.metadata = {
-        keys: dataKeys,
-        hasData: _.contains(dataKeys, 'data')
-      };
+const _ = require('lodash');
+
+const middleware = {
+  middleware(req, res, next) {
+    const param = req.param('param');
+    if (_.contains(['param', 'invalid'], param)) {
+      req.data = param === 'param' ? 'valid' : 'invalid';
     }
-    return originalJson.call(this, response);
-  };
-  next();
-}
-module.exports = {
-  middleware: middleware,
-  errorHandler: errorHandler,
-  auth: auth,
-  logger: logger,
-  dataTransform: dataTransform,
-  responseFormat: responseFormat
-}; 
+    next();
+  },
+  errorHandler(err, req, res, next) {
+    const errorTypes = [
+      { name: 'ValidationError', code: 400 },
+      { name: 'UnauthorizedError', code: 401 },
+      { name: 'NotFoundError', code: 404 },
+    ];
+    const errorType = _.where(errorTypes, { name: err.name });
+    const firstType = _.first(errorType);
+    res.status(firstType ? firstType.code : 500).json({ error: err.message });
+  },
+  auth(req, res, next) {
+    const validKeys = ['123', '456'];
+    const apiKey = req.param('apiKey') || req.headers['x-api-key'];
+    if (_.contains(validKeys, apiKey)) {
+      next();
+    } else {
+      res.status(401).send('Unauthorized');
+    }
+  },
+  logger(req, res, next) {
+    const log = {
+      method: req.method,
+      url: req.url,
+      time: new Date().toISOString(),
+    };
+    if (_.contains(Object.keys(log), 'method')) {
+      console.log(log);
+    }
+    next();
+  },
+  dataTransform(req, res, next) {
+    if (_.contains(Object.keys(req.body), 'data')) {
+      req.body.data = _.compact(req.body.data);
+    }
+    next();
+  },
+};
+
+module.exports = middleware;
