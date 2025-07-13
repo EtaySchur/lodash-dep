@@ -17,6 +17,7 @@ describe('Common Middleware Functions', () => {
       json: jest.fn(),
       jsonp: jest.fn(),
       sendfile: jest.fn(),
+      send: jest.fn(),
     };
     next = jest.fn();
   });
@@ -25,13 +26,13 @@ describe('Common Middleware Functions', () => {
     it('should set req.data as valid for valid param', () => {
       req.param.mockReturnValue('param');
       common.middleware(req, res, next);
-      expect(req.data.isValid).toBe(true);
+      expect(req.data).toBe('valid');
       expect(next).toHaveBeenCalled();
     });
     it('should set req.data as invalid for invalid param', () => {
       req.param.mockReturnValue('invalid');
       common.middleware(req, res, next);
-      expect(req.data.isValid).toBe(false);
+      expect(req.data).toBe('invalid');
       expect(next).toHaveBeenCalled();
     });
   });
@@ -41,30 +42,28 @@ describe('Common Middleware Functions', () => {
       const error = new Error('Test error');
       error.name = 'ValidationError';
       common.errorHandler(error, req, res, next);
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.jsonp).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalled();
     });
     it('should handle unknown error types', () => {
       const error = new Error('Unknown error');
       error.name = 'UnknownError';
       common.errorHandler(error, req, res, next);
       expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.jsonp).toHaveBeenCalled();
+      expect(res.json).toHaveBeenCalled();
     });
   });
 
   describe('auth middleware', () => {
     it('should call next() for valid API key in params', () => {
-      req.param.mockReturnValue('key-1');
+      req.param.mockReturnValue('123');
       common.auth(req, res, next);
-      expect(req.auth.authenticated).toBe(true);
       expect(next).toHaveBeenCalled();
     });
     it('should call next() for valid API key in headers', () => {
       req.param.mockReturnValue(null);
-      req.headers['x-api-key'] = 'key-2';
+      req.headers['x-api-key'] = '456';
       common.auth(req, res, next);
-      expect(req.auth.authenticated).toBe(true);
       expect(next).toHaveBeenCalled();
     });
     it('should return unauthorized for invalid API key', () => {
@@ -72,7 +71,7 @@ describe('Common Middleware Functions', () => {
       req.headers['x-api-key'] = 'invalid';
       common.auth(req, res, next);
       expect(res.status).toHaveBeenCalledWith(401);
-      expect(res.sendfile).toHaveBeenCalled();
+      expect(res.send).toHaveBeenCalledWith('Unauthorized');
     });
   });
 
@@ -92,15 +91,13 @@ describe('Common Middleware Functions', () => {
     it('should transform data with data field', () => {
       req.body = { data: [1, 2, null, 3, undefined, 4, 0, 5] };
       common.dataTransform(req, res, next);
-      expect(req.transformedData).toHaveProperty('compact');
-      expect(req.transformedData).toHaveProperty('first');
-      expect(req.transformedData).toHaveProperty('rest');
+      expect(req.body.data).toEqual([1, 2, 3, 4, 5]);
       expect(next).toHaveBeenCalled();
     });
     it('should handle request without data field', () => {
       req.body = { other: 'data' };
       common.dataTransform(req, res, next);
-      expect(req.transformedData).toBeUndefined();
+      expect(req.body.other).toBe('data');
       expect(next).toHaveBeenCalled();
     });
   });

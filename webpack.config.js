@@ -8,7 +8,6 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'server.bundle.js',
-    clean: true,
   },
   externals: [nodeExternals()],
   module: {

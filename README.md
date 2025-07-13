@@ -31,18 +31,23 @@ The server will start on port 3000.
 ### Express 4.17.x Methods
 
 1. **`app.configure()`** - Middleware configuration
+
    - Used in `server.js` for middleware configuration
 
 2. **`app.router`** - Router setup
+
    - Used in `server.js` for router setup
 
 3. **`req.param()`** - Parameter access
+
    - Used throughout the application for parameter access
 
 4. **`res.sendfile()`** - File serving
+
    - Used in `middleware/common.js` for file serving
 
 5. **`res.jsonp()`** - JSONP responses
+
    - Used in multiple routes for JSONP responses
 
 6. **`app.del()`** - DELETE endpoints
@@ -51,24 +56,31 @@ The server will start on port 3000.
 ### Lodash 3.10.0 Methods
 
 1. **`_.max()`** - Finding maximum values
+
    - Used for finding maximum values
 
 2. **`_.pluck()`** - Extracting property values
+
    - Used for extracting property values from objects
 
 3. **`_.where()`** - Filtering objects
+
    - Used for filtering objects by properties
 
 4. **`_.contains()`** - Checking value existence
+
    - Used for checking if value exists in collection
 
 5. **`_.first()`** - Getting first element
+
    - Used for getting first element
 
 6. **`_.rest()`** - Getting all elements except first
+
    - Used for getting all elements except first
 
 7. **`_.compact()`** - Removing falsy values
+
    - Used for removing falsy values
 
 8. **`_.flatten()`** - Flattening nested arrays
