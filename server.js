@@ -68,7 +68,7 @@ app.get('/api/products', function(req, res) {
     res.sendfile(__dirname + '/data/products.json');
   }
 });
-app.del('/api/users/:id', function(req, res) {
+app.delete('/api/users/:id', function(req, res) {
   var userId = parseInt(req.param('id'));
   var userToRemove = _.where(users, { id: userId });
   if (_.contains(_.pluck(users, 'id'), userId)) {
@@ -102,14 +102,19 @@ app.use(function(err, req, res, next) {
   res.status(500).send('Something broke!');
 });
 var port = process.env.PORT || 3000;
-app.listen(port, function() {
-  console.log('Server running on port ' + port);
-  console.log('Available endpoints:');
-  console.log('  GET  /api/users');
-  console.log('  GET  /api/users/:id');
-  console.log('  GET  /api/scores');
-  console.log('  GET  /api/products');
-  console.log('  POST /api/users');
-  console.log('  DEL  /api/users/:id');
-});
+
+// Only start the server if this is the main module (not when imported for testing)
+if (require.main === module) {
+  app.listen(port, function() {
+    console.log('Server running on port ' + port);
+    console.log('Available endpoints:');
+    console.log('  GET  /api/users');
+    console.log('  GET  /api/users/:id');
+    console.log('  GET  /api/scores');
+    console.log('  GET  /api/products');
+    console.log('  POST /api/users');
+    console.log('  DEL  /api/users/:id');
+  });
+}
+
 module.exports = app; 

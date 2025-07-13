@@ -5,13 +5,21 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "test": "jest",
+    "test:unit": "jest __tests__/unit",
+    "test:integration": "jest __tests__/integration",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "express": "4.17.1",
     "lodash": "3.10.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3"
+  },
   "peerDependencies": {
     "node": ">=12.0.0"
   },
@@ -19,7 +27,6 @@
     "legacy",
     "express",
     "lodash",
-    "deprecated",
     "nodejs"
   ],
   "author": "Legacy Developer",

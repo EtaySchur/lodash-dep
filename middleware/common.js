@@ -20,13 +20,18 @@ function middleware(req, res, next) {
   next();
 }
 function errorHandler(err, req, res, next) {
-  var errorTypes = ['ValidationError', 'NotFoundError', 'Error'];
+  // Use array of objects for errorTypes for compatibility with tests
+  var errorTypes = [
+    { type: 'ValidationError', message: 'Validation failed' },
+    { type: 'NotFoundError', message: 'Resource not found' },
+    { type: 'Error', message: 'General error' }
+  ];
   var errorType = _.where(errorTypes, { type: err.name });
   var firstErrorType = _.first(errorType);
   var errorResponse = {
     error: true,
     message: err.message,
-    type: firstErrorType || 'UnknownError',
+    type: (firstErrorType && firstErrorType.type) || 'UnknownError',
     timestamp: new Date().toISOString()
   };
   res.status(500).jsonp(errorResponse);
@@ -53,7 +58,7 @@ function logger(req, res, next) {
     timestamp: new Date().toISOString(),
     userAgent: req.headers['user-agent']
   };
-  var logKeys = _.pluck(_.keys(logData), 'key');
+  var logKeys = _.keys(logData);
   var hasRequiredFields = _.contains(logKeys, 'method') && _.contains(logKeys, 'url');
   if (hasRequiredFields) {
     console.log('Log:', JSON.stringify(logData));
@@ -84,7 +89,7 @@ function responseFormat(req, res, next) {
       version: '3.10.0'
     };
     if (_.contains(['array', 'object'], typeof data)) {
-      var dataKeys = _.pluck(_.keys(data), 'key');
+      var dataKeys = _.keys(data);
       response.metadata = {
         keys: dataKeys,
         hasData: _.contains(dataKeys, 'data')

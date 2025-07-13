@@ -89,7 +89,7 @@ The server will start on port 3000.
 - `GET /data` - Demonstrate multiple Lodash methods
 - `GET /array-operations` - Show array manipulation methods
 - `GET /params/:id/:action` - Use parameter handling
-- `GET /combined-example` - Demonstrate _.max, _.pairs, and _.where in the same function
+- `GET /product-analytics` - Product analytics using _.max, _.pairs, and _.filter
 - `POST /create` - Create items
 - `DEL /delete/:id` - Delete items
 
@@ -124,10 +124,42 @@ curl http://localhost:3000/api/scores
 curl http://localhost:3000/api/products
 
 # Test data routes
-curl http://localhost:3000/data
-curl http://localhost:3000/array-operations
-curl http://localhost:3000/combined-example
+curl http://localhost:3000/api/data
+curl http://localhost:3000/api/data/array-operations
+curl http://localhost:3000/api/data/product-analytics
 ```
+
+## Running Tests
+
+The project includes comprehensive Jest unit tests for all functionality:
+
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests with coverage
+npm run test:coverage
+```
+
+### Test Coverage
+
+The tests cover:
+- **API Endpoints**: All server routes and their responses
+- **Data Routes**: All data processing endpoints
+- **Middleware**: All middleware functions and their behavior
+- **Lodash Methods**: All deprecated Lodash methods usage
+- **Combined Example**: Specific tests for the combined example endpoint
+- **Edge Cases**: Error handling and boundary conditions
+
+### Test Files
+
+- `__tests__/server.test.js` - Tests for main server endpoints
+- `__tests__/routes/data.test.js` - Tests for data routes
+- `__tests__/middleware/common.test.js` - Tests for middleware functions
+- `__tests__/combined-example.test.js` - Tests for the combined example endpoint
 
 ## License
 

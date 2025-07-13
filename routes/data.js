@@ -66,7 +66,7 @@ router.post('/create', function(req, res) {
     totalItems: items.length
   });
 });
-router.del('/delete/:id', function(req, res) {
+router.delete('/delete/:id', function(req, res) {
   var id = parseInt(req.param('id'));
   var itemExists = _.contains(_.pluck(items, 'id'), id);
   if (itemExists) {
@@ -82,7 +82,7 @@ router.del('/delete/:id', function(req, res) {
   }
 });
 
-router.get('/combined-example', function(req, res) {
+router.get('/product-analytics', function(req, res) {
   var sampleData = [
     { id: 1, name: 'Product A', price: 100, category: 'electronics', rating: 4.5 },
     { id: 2, name: 'Product B', price: 200, category: 'electronics', rating: 4.2 },
@@ -94,14 +94,14 @@ router.get('/combined-example', function(req, res) {
   var electronicsProducts = _.where(sampleData, { category: 'electronics' });
   var maxPriceProduct = _.max(sampleData, 'price');
   var maxPriceProductPairs = _.pairs(maxPriceProduct);
-  var highRatedProducts = _.where(sampleData, function(product) {
+  var highRatedProducts = _.filter(sampleData, function(product) {
     return product.rating >= 4.5;
   });
   var highestRatedProduct = _.max(sampleData, 'rating');
   var highestRatedPairs = _.pairs(highestRatedProduct);
 
   res.json({
-    message: 'Combined example using _.max, _.pairs, and _.where',
+    message: 'Product analytics using _.max, _.pairs, and _.filter',
     electronicsProducts: electronicsProducts,
     maxPriceProduct: maxPriceProduct,
     maxPriceProductPairs: maxPriceProductPairs,
